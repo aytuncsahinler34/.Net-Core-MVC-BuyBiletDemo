@@ -1,0 +1,12 @@
+﻿@model List<BuyBiletDemo.Core.Dto.JourneyDto>
+
+<div class="card mb-4 mt-3 shadow">
+	@foreach (var item in Model) 
+	{ 
+		<div class="card-body">
+			<p class="card-text"><b style="font-size:19px;">Güzergah:</b> @item.OriginLocationName > @item.DestinationLocationName > @item.DepartureTime > @item.ArrivalTime > @item.OriginalPrice</p><br />
+
+		</div>
+	}
+	
+</div>   

@@ -14,7 +14,7 @@ namespace BuyBiletDemo.Core.Helpers
     public class HttpHelper
     {
         private const string _apiContentType = "application/json";
-        public static async Task<T> HttpRequestAsync<T>(string baseUrl, string url, HttpMethodEnum method, object content,
+        public static async Task<T> HttpRequest<T>(string baseUrl, string url, HttpMethodEnum method, object content,
                                                Dictionary<string, IEnumerable<string>> headers, AuthenticationHeaderValue authorization = null) {
 
             using (var http = new HttpClient()) {
@@ -50,7 +50,7 @@ namespace BuyBiletDemo.Core.Helpers
                     requestMessage.Content = null;
 
                 var response = await http.SendAsync(requestMessage);
-                var data = await response.Content.ReadAsStringAsync();
+                var data =await  response.Content.ReadAsStringAsync();
 
                 var jsonData = JsonConvert.DeserializeObject<T>(data);
                 return jsonData;

@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:53907",
+      "applicationUrl": "http://localhost:42856",
       "sslPort": 0
     }
   },
@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BuyBiletDemo": {
+    "BuyBiletDemo.UI": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

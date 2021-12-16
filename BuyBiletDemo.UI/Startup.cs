@@ -1,10 +1,12 @@
+using BuyBiletDemo.Core.Interfaces;
+using BuyBiletDemo.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace BuyBiletDemo
+namespace BuyBiletDemo.UI
 {
 	public class Startup
 	{
@@ -16,7 +18,8 @@ namespace BuyBiletDemo
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services) {
-			services.AddRazorPages();
+			services.AddControllersWithViews();
+			services.AddScoped<IOBiletIntegrationService, OBiletIntegrationService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,9 +28,8 @@ namespace BuyBiletDemo
 				app.UseDeveloperExceptionPage();
 			}
 			else {
-				app.UseExceptionHandler("/Error");
+				app.UseExceptionHandler("/Home/Error");
 			}
-
 			app.UseStaticFiles();
 
 			app.UseRouting();
@@ -35,7 +37,9 @@ namespace BuyBiletDemo
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints => {
-				endpoints.MapRazorPages();
+				endpoints.MapControllerRoute(
+					name: "default",
+					pattern: "{controller=Home}/{action=Index}/{id?}");
 			});
 		}
 	}

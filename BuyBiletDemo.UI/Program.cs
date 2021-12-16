@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace BuyBiletDemo
+namespace BuyBiletDemo.UI
 {
 	public class Program
 	{
