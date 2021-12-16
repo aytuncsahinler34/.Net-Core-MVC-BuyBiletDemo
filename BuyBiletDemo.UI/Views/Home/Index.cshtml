@@ -1,6 +1,4 @@
-﻿@model JourneyModel
-
-<header class="mt-5">
+﻿<header class="mt-5">
 	@await Html.PartialAsync("_slider")
 </header>
 
@@ -10,28 +8,17 @@
 <div class="container shadow" style="margin-bottom: 100px; padding: 10px 14px;">
 	<div class="form-group" style="display: inline;">
 		<form action="/home/index" class="form-inline">
-			<select name="fromLocation" class="form-select form-select-lg mb-3" asp-items="@ViewBag.Cities" style="width: 505px; height:53px;">
+			<select name="fromLocation" class="form-select form-select-lg mb-3" data-val-required="FromLocation field is required."  asp-items="@ViewBag.Cities" style="width: 505px; height:53px;">
 				<option selected disabled>FromLocation</option>
 			</select>
 			<i class="fas fa-long-arrow-alt-right" style="padding: 0px 20px; font-size: 22px;"></i>
-			<select name="toLocation" class="form-select form-select-lg mb-3" asp-items="@ViewBag.Cities" style="width: 505px; height:53px;">
+			<select name="toLocation" class="form-select form-select-lg mb-3" data-val-required="ToLocation field is required."  asp-items="@ViewBag.Cities" style="width: 505px; height:53px;">
 				<option selected disabled>ToLocation</option>
 			</select>
-			<input name="dateTime" class="form-control" type="datetime-local" data-val="true" />
+			<input name="dateTime" class="form-control" type="datetime-local" data-val-required="DateTime field is required." data-val="true" />
 			<br />
 			<br />
 			<button  asp-action="Journey" type="submit" class="btn btn-danger btn-lg btn-block">Find Journey</button>
 		</form>
 	</div>
-
-	@if (Model.Journeys != null) {
-		<div class="row">
-				<div class="col-md-6">
-					@await Html.PartialAsync("_Journey", @Model.Journeys)
-
-				</div>
-			
-		</div>
-	}
-
 </div>

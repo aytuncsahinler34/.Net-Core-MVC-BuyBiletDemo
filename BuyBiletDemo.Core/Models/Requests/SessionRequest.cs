@@ -4,6 +4,9 @@ namespace BuyBiletDemo.Core.Models.Requests
 {
 	public class SessionRequest
 	{
+		public string BaseUrl { get; set; }
+		public string SchemaName { get; set; }
+		public string TokenValue { get; set; }
 		public int Type { get; set; }
 		public Connection Connection { get; set; }
 		public Browser Browser { get; set; }

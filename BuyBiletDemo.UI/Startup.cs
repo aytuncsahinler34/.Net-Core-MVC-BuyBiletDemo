@@ -1,4 +1,5 @@
 using BuyBiletDemo.Core.Interfaces;
+using BuyBiletDemo.Core.Models.Requests;
 using BuyBiletDemo.Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,6 +21,9 @@ namespace BuyBiletDemo.UI
 		public void ConfigureServices(IServiceCollection services) {
 			services.AddControllersWithViews();
 			services.AddScoped<IOBiletIntegrationService, OBiletIntegrationService>();
+			var identitySettingsSection =
+			   Configuration.GetSection("SessionRequest");
+			services.Configure<SessionRequest>(identitySettingsSection);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

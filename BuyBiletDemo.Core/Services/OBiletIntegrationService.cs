@@ -1,6 +1,7 @@
 ﻿using BuyBiletDemo.Core.Enums;
 using BuyBiletDemo.Core.Helpers;
 using BuyBiletDemo.Core.Interfaces;
+using BuyBiletDemo.Core.Models.Args;
 using BuyBiletDemo.Core.Models.Requests;
 using BuyBiletDemo.Core.Models.Responses;
 using System;
@@ -11,34 +12,32 @@ namespace BuyBiletDemo.Core.Services
 {
 	public class OBiletIntegrationService : IOBiletIntegrationService
 	{
-		private readonly string  baseUrl = "https://v2-api.obilet.com/api/";
-		private readonly AuthenticationHeaderValue token = new AuthenticationHeaderValue("Basic", "JEcYcEMyantZV095WVc3G2JtVjNZbWx1");
-		private async  Task<SessionResponse> GetSessionAsync() 
+		private async  Task<SessionResponse> GetSessionAsync(SessionRequest _appIdentitySettings) 
 		{
 			SessionRequest sessionRequest = new SessionRequest {
 				Type = 7,
 				Connection = new Connection() {
-					IpAddress = "165.114.41.21",
-					Port = "5117"
+					IpAddress = _appIdentitySettings.Connection.IpAddress,
+					Port = _appIdentitySettings.Connection.Port
 				},
 				Browser = new Browser() {
-					Name = "Chrome",
-					Version = "47.0.0.12"
+					Name = _appIdentitySettings.Browser.Name,
+					Version = _appIdentitySettings.Browser.Version
 				},
 				Application = new Application() {
-					EquipmentId = "distribusion",
-					Version = "1.0.0.0"
+					EquipmentId = _appIdentitySettings.Application.EquipmentId,
+					Version = _appIdentitySettings.Application.Version
 				}
 			};
 
-			return await HttpHelper.HttpRequest<SessionResponse>(baseUrl, "client/getsession", HttpMethodEnum.POST, sessionRequest, null, token);
+			return await HttpHelper.HttpRequest<SessionResponse>(_appIdentitySettings.BaseUrl, "client/getsession", HttpMethodEnum.POST, sessionRequest, null, new AuthenticationHeaderValue(_appIdentitySettings.SchemaName, _appIdentitySettings.TokenValue));
 
 		}
 
-		public async Task<BusLocationsResponse> GetBusLocationAsync() 
+		public async Task<BusLocationsResponse> GetBusLocationAsync(SessionRequest _appIdentitySettings) 
 		{
 
-			var sessionData = await GetSessionAsync();
+			var sessionData = await GetSessionAsync(_appIdentitySettings);
 
 			BusLocationsRequest busLocationsRequest = new BusLocationsRequest {
 				DataRequestForLocation = null,
@@ -49,19 +48,19 @@ namespace BuyBiletDemo.Core.Services
 				Date = DateTime.Now
 			};
 
-			return await  HttpHelper.HttpRequest<BusLocationsResponse>(baseUrl, "location/getbuslocations", HttpMethodEnum.POST, busLocationsRequest, null, token);
+			return await  HttpHelper.HttpRequest<BusLocationsResponse>(_appIdentitySettings.BaseUrl, "location/getbuslocations", HttpMethodEnum.POST, busLocationsRequest, null, new AuthenticationHeaderValue(_appIdentitySettings.SchemaName, _appIdentitySettings.TokenValue));
 
 		}
 
-		public async Task<BusJourneyResponse> GetBusJourneyAsync() {
+		public async Task<BusJourneyResponse> GetBusJourneyAsync(SessionRequest _appIdentitySettings, FilterJourneyArgs filterJourneyArgs) {
 
-			var sessionData = await GetSessionAsync();
+			var sessionData = await GetSessionAsync(_appIdentitySettings);
 
 			BusJourneyRequest busJourneyRequest = new BusJourneyRequest {
 				DataRequestForJourney = new DataRequestForJourney() {
-					OriginId = 349,
-					DestinationId = 356,
-					DepartureDate = "2021-12-16"
+					OriginId = filterJourneyArgs.FromLocationId,
+					DestinationId = filterJourneyArgs.ToLocationId,
+					DepartureDate = filterJourneyArgs.DateTime.ToString("yyyy-MM-dd")
 				},
 				DeviceSessionJourney = new DeviceSessionJourney() {
 					SessionId = sessionData != null && sessionData.Data != null ? sessionData.Data.SessionId : string.Empty,
@@ -70,7 +69,7 @@ namespace BuyBiletDemo.Core.Services
 				Date = DateTime.Now
 			};
 
-			return await HttpHelper.HttpRequest<BusJourneyResponse>(baseUrl, "journey/getbusjourneys", HttpMethodEnum.POST, busJourneyRequest, null, token);
+			return await HttpHelper.HttpRequest<BusJourneyResponse>(_appIdentitySettings.BaseUrl, "journey/getbusjourneys", HttpMethodEnum.POST, busJourneyRequest, null, new AuthenticationHeaderValue( _appIdentitySettings.SchemaName, _appIdentitySettings.TokenValue));
 
 
 		}
